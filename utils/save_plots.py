@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import torchvision.transforms as transforms
+import os
 
 
 def output_scatter_plot(scan, mask, epoch, image, part):
@@ -10,7 +11,8 @@ def output_scatter_plot(scan, mask, epoch, image, part):
         fig.add_subplot(1, 2, 2)
         plt.imshow(transforms.ToPILImage()(msk), cmap="gray")
 
+        os.makedirs(f"results/{'test' if epoch is None else 'train'}/epoch_{epoch}/image_{image}/part_{part}", exist_ok=True)
         plt.savefig(
-            f"results/{'test' if epoch is None else 'train'}/{epoch}-{image}-{part}-{i}.png"
+            f"results/{'test' if epoch is None else 'train'}/epoch_{epoch}/image_{image}/part_{part}/slice_{i}.png"
         )
         plt.clf()
