@@ -1,4 +1,6 @@
 import torch
+import csv
+import os
 
 
 def get_tp(output, target):
@@ -42,10 +44,14 @@ def get_recall(output, target):
     return tp / (tp + fn)
 
 
-def evaluate(output, target):
-    print(
-        f"Dice: {get_dice(output, target):.4f}, Precission: {get_precission(output, target):.4f}, Recall: {get_recall(output, target):.4f}"
-    )
+def evaluate(output, target, tensor_index, part_index, channel_label):
+    if not os.path.exists("evaluate.csv"):
+        with open("evaluate.csv", 'x') as file_handler:
+            writer = csv.writer(file_handler)
+            writer.writerow(["Tensor index", "Part index", "Channel", "Dice", "Precission", "Recall"])
+    with open("evaluate.csv", 'a') as file_handler:
+        writer = csv.writer(file_handler)
+        writer.writerow([tensor_index, part_index, channel_label, get_dice(output, target), get_precission(output, target), get_recall(output, target)])
 
 
 if __name__ == "__main__":
@@ -89,4 +95,4 @@ if __name__ == "__main__":
         ]
     )
 
-    evaluate(output, target)
+    evaluate(output, target, 1, 1, "ch1")
